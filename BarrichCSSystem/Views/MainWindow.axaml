@@ -1,0 +1,113 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:BarrichCSSystem.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/bcclend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="600"
+        MinHeight="600"
+        MinWidth="1000"
+        x:Class="BarrichCSSystem.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico" xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
+        xmlns:ui="using:FluentAvalonia.UI.Controls"
+        Title="测试系统">
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+    <DockPanel LastChildFill="True">
+        <!-- Top Panel -->
+        <Border DockPanel.Dock="Top" Height="100">
+            <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                <!-- Logo and Title -->
+                <StackPanel HorizontalAlignment="Center" Width="200" DockPanel.Dock="Left" Orientation="Horizontal"
+                            VerticalAlignment="Center">
+                    <iconPacks:PackIconLucide Margin="10 0 0 0" Kind="Bot" Width="32" Height="32"
+                                              VerticalAlignment="Center" />
+                    <TextBlock Text="测试系统" FontSize="20" FontWeight="SemiBold"
+                               VerticalAlignment="Center" Margin="10,0,0,0" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Side Panel -->
+        <Border DockPanel.Dock="Left" Width="200">
+            <DockPanel>
+                <DockPanel.Styles>
+                    <Style Selector="Button.CreateTabButton">
+                        <Setter Property="Margin" Value=" 10 0 10 5" />
+                    </Style>
+                    <Style Selector="Grid.WebviewTab">
+                        <Setter Property="Margin" Value=" 10 5" />
+                    </Style>
+                </DockPanel.Styles>
+                <Button Classes="CreateTabButton" Content="Create Account" DockPanel.Dock="Top" HorizontalAlignment="Stretch"
+                        Command="{Binding CreateWhatsAppPageCommand}">
+                </Button>
+                <ScrollViewer>
+                    <ItemsControl ItemsSource="{Binding WhatsAppsPages}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Classes="WebviewTab">
+                                    <Grid.ContextFlyout>
+                                        <ui:FAMenuFlyout>
+                                            <ui:MenuFlyoutItem Text="Close"
+                                                               Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).CloseWhatsAppAccountWindowCommand}"
+                                                               CommandParameter="{Binding}" />
+                                        </ui:FAMenuFlyout>
+                                    </Grid.ContextFlyout>
+                                    <Button
+                                        Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).SwitchWhatsAppPageCommand}"
+                                        CommandParameter="{Binding}"
+                                        Content="{Binding UniqKey}"
+                                        HorizontalAlignment="Stretch">
+                                    </Button>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+        <Grid>
+            <Grid.Styles>
+                <Style Selector="Decorator">
+                    <Setter Property="IsVisible" Value="False"></Setter>
+                </Style>
+                <Style Selector="ContentControl.active Decorator">
+                    <Setter Property="IsVisible" Value="True"></Setter>
+                </Style>
+            </Grid.Styles>
+            <ContentControl Content="{Binding CurrentPage}"
+                            IsVisible="{Binding CurrentPage, Converter={x:Static ObjectConverters.IsNotNull}}">
+            </ContentControl>
+
+            <ItemsControl Name="MainWebViewsContainer" ItemsSource="{Binding WhatsAppsPages}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Grid />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <ContentControl Content="{Binding}">
+                            <ContentControl.Styles>
+                                <Style Selector="ContentControl">
+                                    <Setter Property="Classes.active">
+                                        <MultiBinding Converter="{StaticResource ReferenceEqualConverter}">
+                                            <Binding></Binding>
+                                            <Binding
+                                                Path="$parent[Window].((vm:MainWindowViewModel)DataContext).CurrentWhatsAppPage">
+                                            </Binding>
+                                        </MultiBinding>
+                                    </Setter>
+                                </Style>
+                            </ContentControl.Styles>
+                        </ContentControl>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+    </DockPanel>
+</Window>

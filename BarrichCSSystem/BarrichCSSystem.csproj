@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <PublishAot>false</PublishAot>
+        <BuiltInComInteropSupport>false</BuiltInComInteropSupport>
+        <TrimMode>link</TrimMode>
+        <JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
+        <RunAOTCompilation>true</RunAOTCompilation>
+        <Configurations>Debug;Release;DebugMockWhatsApp</Configurations>
+        <Platforms>AnyCPU</Platforms>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'DebugMockWhatsApp' ">
+      <DebugSymbols Condition=" '$(DebugSymbols)' == '' ">true</DebugSymbols>
+      <Optimize Condition=" '$(Optimize)' == '' ">false</Optimize>
+      <DefineConstants>TRACE;DEBUG;</DefineConstants>
+    </PropertyGroup>
+    <ItemGroup>
+        <TrimmerRootAssembly Include="FluentAvalonia" />
+        <TrimmerRootAssembly Include="Xilium.CefGlue.Common.Shared" />
+        <TrimmerRootAssembly Include="Xilium.CefGlue.Common" />
+        <TrimmerRootAssembly Include="Xilium.CefGlue.Common" />
+        <TrimmerRootAssembly Include="Xilium.CefGlue.Avalonia" />
+    </ItemGroup>
+    <ItemGroup>
+        <RdXmlFile Include="rd.xml" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <AvaloniaResource Include="Assets\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="11.3.1" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.3.1" />
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.1" />
+        <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.1" />
+        <PackageReference Condition="'$(Configuration)' == 'DebugMockWhatsApp'" Include="Avalonia.Diagnostics" Version="11.3.1" />
+        <PackageReference Include="CefGlue.Avalonia" Version="120.6099.211" />
+        <PackageReference Include="CefGlue.Common" Version="120.6099.211" />
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+        <PackageReference Include="FluentAvaloniaUI" Version="2.3.0" />
+        <PackageReference Include="HotAvalonia" Version="3.0.0" PrivateAssets="All" Publish="True" />
+        <PackageReference Include="IconPacks.Avalonia.Lucide" Version="1.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5" />
+    </ItemGroup>
+</Project>

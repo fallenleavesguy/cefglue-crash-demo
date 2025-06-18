@@ -1,0 +1,22 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="BarrichCSSystem.App"
+             xmlns:sty="using:FluentAvalonia.Styling"
+             xmlns:local="using:BarrichCSSystem"
+             xmlns:converters="clr-namespace:BarrichCSSystem.Converters"
+             RequestedThemeVariant="Dark">
+    <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+    <Application.Resources>
+        <converters:ReferenceEqualConverter x:Key="ReferenceEqualConverter" />
+    </Application.Resources>
+
+    <Application.DataTemplates>
+        <local:ViewLocator />
+        <local:WhatsAppBrowserViewLocator />
+    </Application.DataTemplates>
+
+    <Application.Styles>
+        <sty:FluentAvaloniaTheme />
+        <StyleInclude Source="avares://IconPacks.Avalonia.Lucide/Lucide.axaml" />
+    </Application.Styles>
+</Application>
