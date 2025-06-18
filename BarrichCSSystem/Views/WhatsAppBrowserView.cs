@@ -148,6 +148,7 @@ namespace BarrichCSSystem.Views
         public void Dispose()
         {
             _browser.Dispose();
+            GC.Collect();
         }
 
         private class BrowserLifeSpanHandler : LifeSpanHandler
